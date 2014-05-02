@@ -1,0 +1,95 @@
+/*section {*/
+  /*width: 800px;*/
+  /*height: 480px;*/
+/*}*/
+section {
+  padding: 15px;
+  font-size: 2em;
+  position: relative;
+  text-align: center;
+  background: blue;
+}
+body {
+  margin: 0px;
+  font-family: arial;
+  background: blue;
+}
+
+.center-header > h1 {
+  position: relative;
+  top: 10%;
+  font-size: 4em;
+}
+
+#chooseSize {
+  color: white;
+}
+#chooseSize > button {
+  margin-top: 1em;
+  padding: .25em;
+  font-size: 2em;
+  border: 5px solid gray;
+  cursor: pointer;
+  background: #00d200;
+}
+#biteSize {
+  margin-top: 1.5em;
+  border: 1px solid gray;
+}
+#biteSize > tbody > tr >td {
+  text-align: center;
+  border-right: 1px solid gray;
+  cursor: pointer;
+  padding: 5px;
+}
+#biteSize > tbody > tr > td:nth-child(1) {
+  border-left: 1px solid gray;
+}
+
+#getReady {
+  color: white;
+}
+
+#work {
+  background: lawngreen;
+}
+
+#almostDone {
+  background: greenyellow;
+  font-size: 4em;
+}
+#almostDone > h1 {
+  position: relative;
+  top: 10%;
+}
+
+#done {
+  color: white;
+}
+
+#stopBtn {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: darkred;
+  color: white;
+  font-size: 2em;
+}
+
+.dots > div {
+  width: 2em;
+  height: 2em;
+  display: inline-block;
+  border: .3em solid gray;
+}
+
+#getReady > footer > div.dot {
+  background: greenyellow;
+}
+
+#work > footer > div {
+  background: greenyellow;
+}
+#work > footer > div.dot {
+  background: blue;
+}

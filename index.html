@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>FOCUS</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="jquery-2.1.0.min.js"></script>
+  <script src="minidaemon.js"></script>
+</head>
+<body>
+  <section id="chooseSize">
+    <h1>HOW BIG IS THIS BITE?</h1>
+    <table id="biteSize">
+      <tr>
+        <td onclick="setBiteSize(this.id)" id="0.5">1/2<br>Minute</td>
+        <td onclick="setBiteSize(this.id)" id="1">1<br>Minute</td>
+        <td onclick="setBiteSize(this.id)" id="2">2<br>Minutes</td>
+        <td onclick="setBiteSize(this.id)" id="3">3<br>Minutes</td>
+        <td onclick="setBiteSize(this.id)" id="4">4<br>Minutes</td>
+        <td onclick="setBiteSize(this.id)" id="5">5<br>Minutes</td>
+      </tr>
+    </table>
+    <button onclick="getReady()">
+      START
+    </button>
+  </section>
+
+  <section id="getReady" class="center-header">
+    <h1>GET READY</h1>
+    <footer class="dots ready-dots">
+      <div>&nbsp;</div>
+      <div>&nbsp;</div>
+      <div>&nbsp;</div>
+      <div>&nbsp;</div>
+      <div>&nbsp;</div>
+    </footer>
+  </section>
+
+  <section id="work" class="center-header">
+    <h1>WORK</h1>
+    <footer class="dots work-dots">
+      <div>&nbsp;</div>
+      <div>&nbsp;</div>
+      <div>&nbsp;</div>
+      <div>&nbsp;</div>
+      <div>&nbsp;</div>
+    </footer>
+  </section>
+
+  <section id="done" class="center-header">
+    <h1>GOOD JOB</h1>
+  </section>
+
+  <button id="stopBtn" onclick="stop()">STOP</button>
+
+  <script>
+    function byId(id) { return document.getElementById(id); }
+    var pages = {};
+    pages.chooseSize = byId('chooseSize');
+    pages.getReady = byId('getReady');
+    pages.work = byId('work');
+    pages.done = byId('done');
+
+    var activeTimeout;
+    var activeDaemon;
+
+    var biteSizes = document.getElementsByTagName('td');
+    var biteSize;
+
+    var stopButton = byId('stopBtn');
+
+    function hideAll() {
+      for (var elm in pages) {
+        elm = pages[elm];
+        elm.style.display = "none";
+      }
+    }
+    function show(page) {
+      hideAll();
+      pages[page].style.display = "block";
+      if (page === 'chooseSize') {
+        stopButton.style.display = "none";
+      } else {
+        stopButton.style.display = "inline-block";
+      }
+    }
+    function setBiteSize(minutes) {
+      biteSize = parseFloat(minutes);
+      for (var i = 0; i < biteSizes.length; i++) {
+        var elm = biteSizes[i];
+        if (elm.id == minutes) {
+          elm.style.background = "#699FA3";
+        } else {
+          elm.style.background = "";
+        }
+      }
+    }
+    // Set starting bite size
+    setBiteSize(2);
+    show("chooseSize");
+
+    function getReady() {
+      show("getReady");
+      var dots = $(".ready-dots>div");
+      dots.removeClass("dot");
+      function addDot(index) {
+        $(dots[index - 1]).addClass("dot");
+      }
+      activeDaemon = new MiniDaemon(this, addDot, 1000, 5);
+      activeDaemon.start();
+      activeTimeout = setTimeout(work, 6000);
+    }
+
+    function work() {
+      show("work");
+      var duration = biteSize * 60 * 1000;
+      var dots = $(".work-dots>div");
+      dots.removeClass("dot");
+      function addDot(index) {
+        $(dots[index - 1]).addClass("dot");
+      }
+      activeDaemon = new MiniDaemon(this, addDot, (duration / 5) - 100, 5);
+      activeDaemon.start();
+      activeTimeout = setTimeout(done, duration);
+    }
+
+    function done() {
+      show("done");
+      activeTimeout = setTimeout(getReady, 5000);
+    }
+
+    function stop() {
+      if (activeTimeout) {
+        clearTimeout(activeTimeout);
+      }
+      if (activeDaemon && activeDaemon.pause) {
+        activeDaemon.pause();
+      }
+      show("chooseSize");
+    }
+
+  </script>
+
+</body>
+</html>
